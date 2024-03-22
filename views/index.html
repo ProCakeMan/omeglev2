@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hore chat - Heimsiå</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Velkommen te horeklubben, her kan du chatta</h1>
+      <p>
+        Skriv ner dine interessa, det e jo ikkje implementert då si eg gidde
+        ikkje:
+      </p>
+      <div id="tagsContainer">
+        <!-- Tags will be dynamically added here -->
+      </div>
+      <input type="text" id="tagsInput" placeholder="Enter tags" />
+      <button id="startButton">Start Chat</button>
+      <p>Folke som chatte nå fortiå: <span id="poolCount">0</span></p>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+      var socket = io();
+
+      // Update the pool count when receiving the "poolCount" event from the server
+      socket.on("poolCount", function (count) {
+        document.getElementById("poolCount").textContent = count;
+      });
+
+      document
+        .getElementById("startButton")
+        .addEventListener("click", function () {
+          // Redirect to the chat page
+          console.log("mordi")
+          window.location.href = "/chat";
+        });
+
+      // Function to add tags dynamically
+      function addTag(tag) {
+        var tagsContainer = document.getElementById("tagsContainer");
+        var tagElement = document.createElement("span");
+        tagElement.textContent = tag;
+        tagElement.classList.add("tag");
+        var removeButton = document.createElement("button");
+        removeButton.textContent = "x";
+        removeButton.classList.add("remove-button");
+        removeButton.addEventListener("click", function () {
+          tagsContainer.removeChild(tagElement);
+          var storedTags = JSON.parse(localStorage.getItem("chatTags"));
+
+          if (Array.isArray(storedTags)) {
+            const index = storedTags.indexOf(tag);
+            if (index > -1) {
+              // only splice array when item is found
+              storedTags.splice(index, 1); // 2nd parameter means remove one item only
+            }
+          }
+          localStorage.setItem("chatTags", JSON.stringify(storedTags));
+        });
+        tagElement.appendChild(removeButton);
+        tagsContainer.appendChild(tagElement);
+      }
+
+      // Event listener for input field
+      document
+        .getElementById("tagsInput")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            var tag = e.target.value.trim();
+            if (tag) {
+              addTag(tag);
+              var storedTags = JSON.parse(localStorage.getItem("chatTags"));
+              if (Array.isArray(storedTags)) {
+                storedTags.push(tag);
+              }
+              localStorage.setItem("chatTags", JSON.stringify(storedTags));
+              e.target.value = "";
+            }
+          }
+        });
+
+      // Load stored tags from local storage
+      var storedTags = JSON.parse(localStorage.getItem("chatTags"));
+      if (Array.isArray(storedTags)) {
+        storedTags.forEach(function (tag) {
+          addTag(tag);
+        });
+      }
+    </script>
+  </body>
+</html>

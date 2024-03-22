@@ -1,0 +1,136 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.top-bar {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+}
+
+.container {
+  position: fixed;
+  top: 40px;
+  bottom: 60px;
+  width: 100%;
+  overflow-y: auto;
+  background-color: #f0f0f0;
+  margin-top: 60px;
+  padding: 10px;
+  /* margin-left: 10px; 
+  margin-right: 10px;  */
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #ddd;
+  padding: 10px;
+  /* margin-left: 10px; 
+  margin-right: 10px;  */
+}
+
+.bottom-bar form {
+  display: flex;
+}
+
+.bottom-bar form {
+  display: flex;
+}
+
+.bottom-bar form input[type="text"] {
+  flex: 1;
+  min-width: 50%; /* Ensure text input takes up at least 50% of the width */
+  padding: 10px;
+}
+
+.bottom-bar form button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  margin-left: 10px; /* Add spacing between text input and button */
+  outline: none;
+}
+
+.bottom-bar form button:hover {
+  background-color: #0056b3;
+}
+
+.bottom-bar form .image-input-container {
+  display: flex;
+  align-items: center;
+}
+
+/* .bottom-bar form input[type="file"] {
+  display: none;
+} */
+
+.bottom-bar form .image-input-container input[type="file"] {
+  display: inline-block;
+}
+
+.bottom-bar form .image-input-container button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  margin-left: 10px;
+  outline: none;
+}
+
+.bottom-bar form .image-input-container button:hover {
+  background-color: #0056b3;
+}
+
+.bottom-bar form .image-input-container {
+  margin-left: auto; /* Move image input container to the right */
+}
+
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+ul li {
+  padding: 10px;
+  max-width: 80%;
+  margin-bottom: 10px; /* Add margin between messages */;
+}
+
+/* Styles for chat messages */
+.own-message {
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 10px;
+  align-self: flex-end; /* Align to left */
+  word-wrap: break-word; /* Enable text wrapping */
+  border: 1px solid #000; /* Add black border */
+  min-width: 10vh;
+}
+
+.stranger-message {
+  background-color: #f0f0f0;
+  color: #333;
+  border-radius: 10px;
+  align-self: flex-start; /* Align to right */
+  word-wrap: break-word; /* Enable text wrapping */
+  border: 1px solid #000; /* Add black border */
+  min-width: 10vh;
+}
+/* Additional styles for images */
+li img {
+  max-width: 100%;
+  max-height: 200px; /* Adjust max height as needed */
+}

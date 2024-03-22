@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hore Chat</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/styles.css">
+</head>
+<body>
+  <div class="top-bar">
+    <h1>Hore Chat</h1>
+  </div>
+  <div class="container">
+    <ul id="messages"></ul>
+  </div>
+  <div class="bottom-bar">
+    <form id="form" action="" enctype="multipart/form-data">
+      <input id="input" autocomplete="off" placeholder="Type your message...">
+      <button>Send</button>
+      <input type="file" id="fileInput" style="display: none;" accept="image/*"/>
+      <button id="imageButton" onclick="document.getElementById('fileInput').click();">Send image...</button>
+    </form>
+  </div>
+  
+
+  <script>
+    var socket = io();
+
+    var form = document.getElementById('form');
+    form.style.visibility = 'hidden';
+    var input = document.getElementById('input');
+    var messages = document.getElementById('messages');
+
+    // Event listener for form submission
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var message = input.value.trim();
+      if (message) {
+        socket.emit('chat message', { type: 'text', content: message });
+        input.value = '';
+      }
+    });
+
+    // Event listener for image upload
+    document.getElementById('fileInput').addEventListener('change', function() {
+      var fileInput = this;
+      var file = fileInput.files[0];
+      if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+          var imageData = event.target.result;
+          socket.emit('chat message', { type: 'image', content: imageData });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert('Please select an image to upload.');
+      }
+    });
+
+    // Event listener for receiving messages from the server
+  socket.on('chat message', function(data) {
+    var item = document.createElement('li');
+    if (data.type === 'text') {
+      item.textContent = data.content;
+    } else if (data.type === 'image') {
+      var image = new Image();
+      image.src = data.content;
+      item.appendChild(image);
+    }
+    if (data.senderId == socket.id) {
+      item.classList.add('own-message');
+    } else {
+      item.classList.add('stranger-message');
+    }
+    messages.appendChild(item);
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+
+
+    socket.on('startChat', function() {
+      form.style.visibility = 'visible';
+    });
+  </script>
+</body>
+</html>
